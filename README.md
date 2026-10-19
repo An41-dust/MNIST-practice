@@ -1,1 +1,1 @@
-# firts-MNIST
+# MNIST-practice
