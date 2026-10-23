@@ -105,29 +105,25 @@ for images,labels in train_loader:
 class Dight(nn.Module):
     def __init__(self):
         super().__init__()
-        self.conv1 = nn.Conv2d(1,10,5) #二层卷积 1→10
-        self.conv2 = nn.Conv2d(10,20,3) #→20
-        self.fc1 = nn.Linear(20*10*10,500) #→500
-        self.fc2 = nn.Linear(500,10) #→10
+        self.conv1 = nn.Conv2d(1,32,5,padding=2) #二层卷积 1→32
+        self.conv2 = nn.Conv2d(32,64,3,padding=1) #→64
+        self.conv3 = nn.Conv2d(64,64,3,padding=1)
+        self.fc1 = nn.Linear(64*7*7,256) #→256
+        self.drop = nn.Dropout(0.5) #丢失数据，防止过拟合
+        self.fc2 = nn.Linear(256,10) #→10
 
     def forward(self,x):
-        input_size = x.size(0)
-        x = self.conv1(x)
-        x = F.relu(x) #激活函数
-        x = F.max_pool2d(x,2,2)
-
-        x = self.conv2(x)
-        x = F.relu(x)
-
-        x = x.view(input_size, -1)
-
-        x = self.fc1(x)
-        x = F.relu(x)
-
+        x = F.relu(self.conv1(x)) #激活函数
+        x = F.max_pool2d(x,2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x,2)
+        x = F.relu(self.conv3(x))
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = self.drop(x)
         x = self.fc2(x)
 
-        output = F.log_softmax(x,dim=1) #输出为概率
-        return output
+        return F.log_softmax(x,dim=1) #输出为概率
 
 # 优化器
 model = Dight().to(DEVICE)
