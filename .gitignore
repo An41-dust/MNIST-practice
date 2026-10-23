@@ -219,5 +219,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-#训练集文件夹
+#训练集&模型文件夹
 dataset/
+model/
