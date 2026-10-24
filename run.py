@@ -102,7 +102,7 @@ for images,labels in train_loader:
 #for循环迭代时调用了魔法方法__getitem__
 
 # 神经网络模型
-class Dight(nn.Module):
+class Digit(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(1,32,5,padding=2) #二层卷积 1→32
@@ -126,7 +126,7 @@ class Dight(nn.Module):
         return F.log_softmax(x,dim=1) #输出为概率
 
 # 优化器
-model = Dight().to(DEVICE)
+model = Digit().to(DEVICE)
 optimizer = optim.Adam(model.parameters())
 
 # 训练方法
